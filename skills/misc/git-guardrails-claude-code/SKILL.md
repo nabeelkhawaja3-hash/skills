@@ -17,6 +17,19 @@ Sets up a PreToolUse hook that intercepts and blocks dangerous git commands befo
 
 When blocked, Claude sees a message telling it that it does not have authority to access these commands.
 
+## Limitations
+
+This is a guardrail against **accidents**, not a security boundary. It matches
+patterns against the command string, so it stops the everyday forms of these
+commands but cannot stop deliberate evasion. The script normalises whitespace,
+leading environment assignments (`GIT_DIR=… git push`) and global git options
+(`git -C path push`), but a command can still reach git by routes the pattern
+list does not see — a shell alias or function, a wrapper script, `sh -c` with an
+assembled string, `xargs`, or a git invocation from inside another program.
+
+Treat it as a seatbelt, not a lock. Do not rely on it as the only thing standing
+between an agent and a destructive git operation.
+
 ## Steps
 
 ### 1. Ask scope
